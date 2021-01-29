@@ -16,7 +16,7 @@ let urlDB
  if (process.env.NODE_ENV=='dev') {
      urlDB = 'mongodb://localhost:27017/node-restserver'
 } else {
-    urlDB = 'mongodb+srv://fmronin:xryR0P9a2kjF6WeZ@cluster0.z1a7g.mongodb.net/node-restserver'
+    urlDB = process.env.MONGO_URI
 }
 
 process.env.DB_URL = urlDB
