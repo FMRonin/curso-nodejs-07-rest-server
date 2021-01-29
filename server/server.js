@@ -1,5 +1,7 @@
 require('./config/config')
 
+const mongoose = require('mongoose')
+
 const express = require('express')
 const app = express()
 
@@ -9,25 +11,13 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
+app.use(require('./routers/users'))
 
-
-app.get('/users/:id', (req,res) => {
-    res.json(`get Users ${req.params.id}`)
-})
-app.post('/users', (req,res) => {
-    let reqBody = req.body
-    if (reqBody.name === undefined){
-        res.status(400).json({code:'10100',message:'Falta un parametro'})
-    }else{
-        res.json(`post new user con: ${JSON.stringify(reqBody)}`)
-    }
-})
-app.put('/users/:id', (req,res) => {
-    let request = JSON.stringify(req.body)
-    res.json(`put ${req.params.id} con: ${request}`)
-})
-app.delete('/users/:id', (req,res) => {
-    res.json(`delete user ${req.params.id}`)
-})
+mongoose.connect(process.env.DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+    }).then(()=>console.log('conectado')).catch((err) => console.log(err))
 
 app.listen(process.env.PORT,() => console.log(`Ecuchando por puerto ${process.env.PORT}`))
