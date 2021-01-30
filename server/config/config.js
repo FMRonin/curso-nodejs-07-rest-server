@@ -9,6 +9,17 @@ process.env.PORT = process.env.PORT || 3000
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev'
 
 /* 
+ * Fecha de expiración de token
+ */
+process.env.EXPIRATION_TOKEN = '30 days'
+
+/* 
+ * Semilla de firmado de jwt
+ * heroku config:set SEED=""  
+ */
+process.env.SEED = process.env.SEED || 'secret-token-desarrollo'
+
+/* 
  * Entorno
  */
 let urlDB

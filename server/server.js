@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.use(require('./routers/users'))
+app.use(require('./routers/index'))
 
 mongoose.connect(process.env.DB_URL, {
     useNewUrlParser: true,

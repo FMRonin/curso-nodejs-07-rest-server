@@ -2,14 +2,15 @@ const express = require('express')
 const app = express()
 const bcrypt = require('bcrypt');
 const _ = require('underscore')
+const { validateToken,validateRole } = require('../middlewares/authentication')
 
 const User = require('../models/user');
 
-app.get('/users/:id', (req,res) => {
+app.get('/users/:id', validateToken, (req,res) => {
     res.json(`get Users ${req.params.id}`)
 })
 
-app.get('/users', (req,res) => {
+app.get('/users', validateToken, (req,res) => {
 
     let desde = Number(req.query.desde) || 0
     let limite = Number(req.query.limite) || 5
@@ -27,7 +28,7 @@ app.get('/users', (req,res) => {
                 })
             }
 
-            User.count(usuarioActivo, (err,count) => {
+            User.countDocuments(usuarioActivo, (err,count) => {
                 if (err) {
                     return res.status(400).json({
                         ok: false,
@@ -44,7 +45,7 @@ app.get('/users', (req,res) => {
         })
 })
 
-app.post('/users', (req,res) => {
+app.post('/users',[validateToken,validateRole], (req,res) => {
     let reqBody = req.body
 
     let usuario = new User({
@@ -69,10 +70,10 @@ app.post('/users', (req,res) => {
     })
 })
 
-app.put('/users/:id', (req,res) => {
+app.put('/users/:id',[validateToken,validateRole], (req,res) => {
 
     let id = req.params.id
-    let body = _.pick(req.body,['name','email','img','role']) 
+    let body = _.pick(req.body,['name','email','img','role']) //limitar parametros a actualizar
     //let body =req.body
 
     User.findByIdAndUpdate(id,body,{new:true, runValidators:true, context: 'query' },(err,usuarioDB) =>{
@@ -83,6 +84,13 @@ app.put('/users/:id', (req,res) => {
             })
         }
 
+        if (!usuarioDB) {
+            return res.status(400).json({
+                ok: false,
+                err:'No existe usuario con ese ID'
+            })
+        }
+
         res.json({
             ok:true,
             usuario:usuarioDB
@@ -90,7 +98,7 @@ app.put('/users/:id', (req,res) => {
     })
 })
 
-app.delete('/users/:id', (req,res) => {
+app.delete('/users/:id', [validateToken,validateRole] , (req,res) => {
     let id = req.params.id
     
     cambiarEstado = {state:false}
