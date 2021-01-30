@@ -19,6 +19,12 @@ process.env.EXPIRATION_TOKEN = '30 days'
  */
 process.env.SEED = process.env.SEED || 'secret-token-desarrollo'
 
+
+/* 
+ * Google Client ID
+ */
+process.env.GOOGLE_CLIENT_ID =  '395634428305-c3vh2ba55f1f7g9lufo8r835k9prn29g.apps.googleusercontent.com'
+
 /* 
  * Entorno
  */
