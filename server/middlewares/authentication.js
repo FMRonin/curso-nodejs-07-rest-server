@@ -16,7 +16,6 @@ const jwt = require('jsonwebtoken');
             })
         }
         req.user = decoder.user
-        console.log(req.user)
         next()
     })
 

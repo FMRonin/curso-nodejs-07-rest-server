@@ -15,9 +15,9 @@ app.get('/users', validateToken, (req,res) => {
     let desde = Number(req.query.desde) || 0
     let limite = Number(req.query.limite) || 5
 
-    let usuarioActivo = {state:true}
+    let usuarioActivoFiltro = {state:true}
 
-    User.find(usuarioActivo,'name email role state google')
+    User.find(usuarioActivoFiltro,'name email role state google')
         .skip(desde)
         .limit(limite)
         .exec((err,users) =>{
@@ -28,7 +28,7 @@ app.get('/users', validateToken, (req,res) => {
                 })
             }
 
-            User.countDocuments(usuarioActivo, (err,count) => {
+            User.countDocuments(usuarioActivoFiltro, (err,count) => {
                 if (err) {
                     return res.status(400).json({
                         ok: false,
